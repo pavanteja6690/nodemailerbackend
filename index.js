@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const nodemailer = require("nodemailer");
 
+const a = [];
 // async..await is not allowed in global scope, must use a wrapper
 async function main(msg, to) {
   // Generate test SMTP service account from ethereal.email
@@ -39,7 +40,14 @@ async function main(msg, to) {
   //   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
+app.get("/previoustemplates", function (req, res) {
+  res.send(a);
+});
 app.post("/admin/sendmail", function (req, res) {
+  while (a.length >= 5) {
+    a.shift();
+  }
+  a.push(req.body.msg);
   main(req.body.msg, req.body.to);
   //   console.log("called");
 });
